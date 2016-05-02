@@ -1,20 +1,22 @@
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
-#include "game.h"
-
+#include "Game.h"
 
 int main()
 {
-	game battleship;
 	srand(time(NULL));
-	if (battleship.hello_player() == false)
+
+	Game game;
+	
+	if (game.setShipsPlayer() == false)
 	{
 		std::cout << "Goodbye!\n";
 		return 0;
 	};
-	battleship.computer_hello();
-	battleship.game_started();
+	game.setShipsComputer();
+
+	game.start();
 	
 	return 0;
 }

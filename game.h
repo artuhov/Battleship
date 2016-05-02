@@ -1,19 +1,22 @@
 #pragma once
-#include "seaboard.h"
+#include "Board.h"
+#include "BaseSetShips.h"
+#include "PlayerSetShips.h"
+#include "ComputerSetShips.h"
 
-class game
+class Game
 {
-private:
-	enum  parametersOFgame { gameover, shipKill, hitShip, missfire, miss };
-	seaboard player;
-	seaboard computer;
-	parametersOFgame make_a_move(seaboard& obj, int move_x, int move_y);
-	parametersOFgame finish_kill_ship(seaboard& obj, int _move_x, int _move_y);
-	void show_game_boards(bool showPlayerShip, bool showComputerShip);
-
 public:
-	bool hello_player();
-	void computer_hello();
-	void game_started();
+	bool setShipsPlayer();
+	void setShipsComputer();
+	void start();
+
+private:
+	enum  GameParametrs { GAMEOVER, SHIP_KILL, HIT_SHIP, MISS_FIRE, MISS };
+	Board player;
+	Board computer;
+	GameParametrs makeMove(Board& board, int moveX, int moveY);
+	GameParametrs finishShipKill(Board& board, int moveX, int moveY);
+	void showGameBoards(bool showPlayerShip, bool showComputerShip);
 };
 

@@ -1,34 +1,34 @@
 #include <iostream>
-#include "game.h"
+#include <memory>
+#include "Game.h"
 
-game::parametersOFgame game::make_a_move(seaboard& obj, int move_x, int move_y)
+Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 {
-	switch (obj.return_value_on_board(move_x, move_y))
+	switch (board.getValue(moveX, moveY))
 	{
-	case seaboard::emptyCell:
-		std::cout << "make a move to (" << move_x << ", " << move_y << ")\n";
-		obj.add_value_on_board(move_x, move_y, seaboard::bossShot);
-		return miss;
+	case Board::EMPTY_CELL:
+		std::cout << "make a move to (" << moveX << ", " << moveY << ")\n";
+		board.setValue(moveX, moveY, Board::BOSS_SHOT);
+		return MISS;
 
-	case seaboard::insertedShip:
-		std::cout << "make a move to (" << move_x << ", " << move_y << ")\n";
-		obj.add_value_on_board(move_x, move_y, seaboard::strickenShip);
-		if (obj.checking_kill_ship(move_x, move_y))
+	case Board::INSERTED_SHIP:
+		std::cout << "make a move to (" << moveX << ", " << moveY << ")\n";
+		board.setValue(moveX, moveY, Board::STRICKEN_SHIP);
+		if (board.checkShipKill(moveX, moveY))
 		{
-			obj.mark_kill_ship(move_x, move_y);
-			if (obj.winning_check())
-				return gameover;
-			return shipKill;
+			board.markShipKill(moveX, moveY);
+			if (board.checkWinnig())
+				return GAMEOVER;
+			return SHIP_KILL;
 		}
-		return hitShip;
+		return HIT_SHIP;
 
-	case seaboard::strickenShip:
-	case seaboard::bossShot:
-		return missfire;
+	case Board::STRICKEN_SHIP:
+	case Board::BOSS_SHOT:
+		return MISS_FIRE;
 	}
 }
-
-game::parametersOFgame game::finish_kill_ship(seaboard& obj, int move_x, int move_y)
+Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 {
 	static int index = 1;
 
@@ -36,96 +36,96 @@ game::parametersOFgame game::finish_kill_ship(seaboard& obj, int move_x, int mov
 	static bool flagHorizontRight = true;
 	while (flagHorizontRight)
 	{
-		if (move_x + index > 10)
+		if (moveX + index > 10)
 		{
 			index = 1;
 			flagHorizontRight = false;
 			break;
 		}
-		switch (make_a_move(obj, move_x + index, move_y))
+		switch (makeMove(board, moveX + index, moveY))
 		{
-		case gameover:
-			return gameover;
-		case shipKill:
+		case GAMEOVER:
+			return GAMEOVER;
+		case SHIP_KILL:
 			flagHorizontRight = true;
 			index = 1;
-			return shipKill;
-		case hitShip:
+			return SHIP_KILL;
+		case HIT_SHIP:
 			index++;
 			break;
-		case missfire:
+		case MISS_FIRE:
 			flagHorizontRight = false;
 			index = 1;
 			break;
-		case miss:
+		case MISS:
 			flagHorizontRight = false;
 			index = 1;
-			return miss;
+			return MISS;
 		}
 	}
 	// looking for the ship horizontally left
 	static bool flagHorizontLeft = true;
 	while (flagHorizontLeft)
 	{
-		if (move_x - index < 1)
+		if (moveX - index < 1)
 		{
 			index = 1;
 			flagHorizontLeft = false;
 			break;
 		}
-		switch (make_a_move(obj, move_x - index, move_y))
+		switch (makeMove(board, moveX - index, moveY))
 		{
-		case gameover:
-			return gameover;
-		case shipKill:
+		case GAMEOVER:
+			return GAMEOVER;
+		case SHIP_KILL:
 			flagHorizontRight = true;
 			flagHorizontLeft = true;
 			index = 1;
-			return shipKill;
-		case hitShip:
+			return SHIP_KILL;
+		case HIT_SHIP:
 			index++;
 			break;
-		case missfire:
+		case MISS_FIRE:
 			flagHorizontLeft = false;
 			index = 1;
 			break;
-		case miss:
+		case MISS:
 			flagHorizontLeft = false;
 			index = 1;
-			return miss;
+			return MISS;
 		}
 	}
 	// looking for the ship vertical up
 	static bool flagVerticalUp = true;
 	while (flagVerticalUp)
 	{
-		if (move_y + index > 10)
+		if (moveY + index > 10)
 		{
 			index = 1;
 			flagVerticalUp = false;
 			break;
 		}
-		switch (make_a_move(obj, move_x, move_y + index))
+		switch (makeMove(board, moveX, moveY + index))
 		{
-		case gameover:
-			return gameover;
-		case shipKill:
+		case GAMEOVER:
+			return GAMEOVER;
+		case SHIP_KILL:
 			flagHorizontRight = true;
 			flagHorizontLeft = true;
 			flagVerticalUp = true;
 			index = 1;
-			return shipKill;
-		case hitShip:
+			return SHIP_KILL;
+		case HIT_SHIP:
 			index++;
 			break;
-		case missfire:
+		case MISS_FIRE:
 			flagVerticalUp = false;
 			index = 1;
 			break;
-		case miss:
+		case MISS:
 			flagVerticalUp = false;
 			index = 1;
-			return miss;
+			return MISS;
 		}
 	}
 
@@ -133,40 +133,37 @@ game::parametersOFgame game::finish_kill_ship(seaboard& obj, int move_x, int mov
 	static bool flagVerticaltDown = true;
 	while (flagVerticaltDown)
 	{
-		if (move_y - index < 1)
+		if (moveY - index < 1)
 		{
 			index = 1;
 			flagVerticaltDown = false;
 			break;
 		}
-		switch (make_a_move(obj, move_x, move_y - index))
+		switch (makeMove(board, moveX, moveY - index))
 		{
-		case gameover:
-			return gameover;
-		case shipKill:
+		case GAMEOVER:
+			return GAMEOVER;
+		case SHIP_KILL:
 			flagHorizontRight = true;
 			flagHorizontLeft = true;
 			flagVerticalUp = true;
 			flagVerticaltDown = true;
 			index = 1;
-			return shipKill;
-		case hitShip:
+			return SHIP_KILL;
+		case HIT_SHIP:
 			index++;
 			break;
 		}
 	}
 }
-
-void game::show_game_boards(bool showPlayerShip, bool showComputerShip)
+void Game::showGameBoards(bool showPlayerShip, bool showComputerShip)
 {
 	std::cout << "player board: \n";
-	player.show_board(showPlayerShip);
+	player.showBoard(showPlayerShip);
 	std::cout << "computer board: \n";
-	computer.show_board(showComputerShip);
+	computer.showBoard(showComputerShip);
 }
-
-
-bool game::hello_player()
+bool Game::setShipsPlayer()
 {
 	std::cout << "\t\t _____   H e l l o !    I t    i s    S E A    B A T T L E    G A M E   _____\n\n";
 	std::cout << "Do you want enter ships random (r) or by yourself (y)? \n";
@@ -175,41 +172,46 @@ bool game::hello_player()
 	char symbol;
 	std::cin >> symbol;
 
-	switch (symbol)
-	{
-	case 'r':
-	case 'R':
-		player.add_ships_random();
-		std::cout << std::endl;
-		return true;
-	case 'y':
-	case 'Y':
-		player.add_ships_manual();
-		std::cout << std::endl;
-		return true;
-	default:
-		return false;
-	}
+		switch (symbol)
+		{
+		case 'r':
+		case 'R':
+		{
+			std::unique_ptr<BaseSetShips> uniqPtr (new ComputerSetShips());
+			uniqPtr->setShip(player);
+			std::cout << std::endl;
+			return true;
+		}
+		case 'y':
+		case 'Y':
+		{
+			std::unique_ptr<BaseSetShips> uniqPtr(new PlayerSetShips());
+			uniqPtr->setShip(player);
+			std::cout << std::endl;
+			return true;
+		}
+		default:
+			return false;
+		}
 }
-
-void game::computer_hello()
+void Game::setShipsComputer()
 {
-	computer.add_ships_random();
+	std::unique_ptr<BaseSetShips> uniqPtr(new ComputerSetShips());
+	uniqPtr->setShip(computer);
 	std::cout << std::endl;
 }
-
-void game::game_started()
+void Game::start()
 {
 	std::cout << "G A M E   S T A R T E D \n\n";
-	parametersOFgame playerDetector = missfire;
-	parametersOFgame compDetector = missfire;
+	GameParametrs playerDetector = MISS_FIRE;
+	GameParametrs computerDetector = MISS_FIRE;
 
 	while (true)
 	{
-		show_game_boards(1, 0);
+		showGameBoards(1, 0);
 
 		// the beginning of a player's turn
-		while (playerDetector == shipKill || playerDetector == hitShip || playerDetector == missfire)
+		while (playerDetector == SHIP_KILL || playerDetector == HIT_SHIP || playerDetector == MISS_FIRE)
 		{
 			std::cout << "make you choice (enter x, y): ";
 			int x;
@@ -217,14 +219,14 @@ void game::game_started()
 			std::cin >> x >> y;
 			if (x > 10 || x < 1 || y > 10 || y < 1)
 				continue;
-			playerDetector = make_a_move(computer, x, y);
-			show_game_boards(1, 0);
+			playerDetector = makeMove(computer, x, y);
+			showGameBoards(1, 0);
 		}
 
-		if (playerDetector == miss)
-			playerDetector = missfire; // set default
+		if (playerDetector == MISS)
+			playerDetector = MISS_FIRE; // set default
 
-		if (playerDetector == gameover)
+		if (playerDetector == GAMEOVER)
 		{
 			std::cout << "player WIN !!!\n";
 			break;
@@ -233,27 +235,27 @@ void game::game_started()
 
 
 		// the beginning of a computer's turn
-		while (compDetector == shipKill || compDetector == hitShip || compDetector == missfire)
+		while (computerDetector == SHIP_KILL || computerDetector == HIT_SHIP || computerDetector == MISS_FIRE)
 		{
 			static bool hitShipStatus = false;
-			static int move_x;
-			static int move_y;
+			static int moveX;
+			static int moveY;
 
 			if (!hitShipStatus)
 			{
-				move_x = rand() % 10 + 1;
-				move_y = rand() % 10 + 1;
+				moveX = rand() % 10 + 1;
+				moveY = rand() % 10 + 1;
 
-				compDetector = make_a_move(player, move_x, move_y);
-				if (compDetector == hitShip)
+				computerDetector = makeMove(player, moveX, moveY);
+				if (computerDetector == HIT_SHIP)
 					hitShipStatus = true;
-				if (compDetector == shipKill)
+				if (computerDetector == SHIP_KILL)
 					std::cout << "computer kill your ship!\a\n";
 			}
 			else
 			{
-				compDetector = finish_kill_ship(player, move_x, move_y);
-				if (compDetector == shipKill)
+				computerDetector = finishShipKill(player, moveX, moveY);
+				if (computerDetector == SHIP_KILL)
 				{
 					hitShipStatus = false;
 					std::cout << "computer kill your ship!\a\n";
@@ -261,10 +263,10 @@ void game::game_started()
 			}
 		}
 
-		if (compDetector == miss)
-			compDetector = missfire; // set default
+		if (computerDetector == MISS)
+			computerDetector = MISS_FIRE; // set default
 
-		if (compDetector == gameover)
+		if (computerDetector == GAMEOVER)
 		{
 			std::cout << "Computer WIN !!!\n";
 			break;
