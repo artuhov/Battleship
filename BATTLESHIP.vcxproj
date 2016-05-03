@@ -20,20 +20,26 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseSetShips.cpp" />
-    <ClCompile Include="ComputerSetShips.cpp" />
+    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="Movement.cpp" />
+    <ClCompile Include="RandomSetShips.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainBattle.cpp" />
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="PlayerSetShips.cpp" />
+    <ClCompile Include="ManualSetShips.cpp" />
     <ClCompile Include="Ship.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseSetShips.h" />
-    <ClInclude Include="ComputerSetShips.h" />
+    <ClInclude Include="Move.h" />
+    <ClInclude Include="Movement.h" />
+    <ClInclude Include="RandomSetShips.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Board.h" />
-    <ClInclude Include="PlayerSetShips.h" />
+    <ClInclude Include="ManualSetShips.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE844D79-18F1-4718-B4B8-7305D7401126}</ProjectGuid>

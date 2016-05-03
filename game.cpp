@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include "Game.h"
+#include "Test.h"
 
 Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 {
@@ -14,7 +15,7 @@ Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 	case Board::INSERTED_SHIP:
 		std::cout << "make a move to (" << moveX << ", " << moveY << ")\n";
 		board.setValue(moveX, moveY, Board::STRICKEN_SHIP);
-		if (board.checkShipKill(moveX, moveY))
+		if (board.checkShipKill(Move(moveX, moveY)))
 		{
 			board.markShipKill(moveX, moveY);
 			if (board.checkWinnig())
@@ -28,9 +29,10 @@ Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 		return MISS_FIRE;
 	}
 }
+
 Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 {
-	static int index = 1;
+	int index = 1;
 
 	// looking for the ship horizontally right
 	static bool flagHorizontRight = true;
@@ -38,7 +40,6 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 	{
 		if (moveX + index > 10)
 		{
-			index = 1;
 			flagHorizontRight = false;
 			break;
 		}
@@ -48,28 +49,25 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 			return GAMEOVER;
 		case SHIP_KILL:
 			flagHorizontRight = true;
-			index = 1;
 			return SHIP_KILL;
 		case HIT_SHIP:
 			index++;
 			break;
 		case MISS_FIRE:
 			flagHorizontRight = false;
-			index = 1;
 			break;
 		case MISS:
 			flagHorizontRight = false;
-			index = 1;
 			return MISS;
 		}
 	}
 	// looking for the ship horizontally left
 	static bool flagHorizontLeft = true;
+	index = 1;
 	while (flagHorizontLeft)
 	{
 		if (moveX - index < 1)
 		{
-			index = 1;
 			flagHorizontLeft = false;
 			break;
 		}
@@ -80,28 +78,25 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 		case SHIP_KILL:
 			flagHorizontRight = true;
 			flagHorizontLeft = true;
-			index = 1;
 			return SHIP_KILL;
 		case HIT_SHIP:
 			index++;
 			break;
 		case MISS_FIRE:
 			flagHorizontLeft = false;
-			index = 1;
 			break;
 		case MISS:
 			flagHorizontLeft = false;
-			index = 1;
 			return MISS;
 		}
 	}
 	// looking for the ship vertical up
 	static bool flagVerticalUp = true;
+	index = 1;
 	while (flagVerticalUp)
 	{
 		if (moveY + index > 10)
 		{
-			index = 1;
 			flagVerticalUp = false;
 			break;
 		}
@@ -113,29 +108,26 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 			flagHorizontRight = true;
 			flagHorizontLeft = true;
 			flagVerticalUp = true;
-			index = 1;
 			return SHIP_KILL;
 		case HIT_SHIP:
 			index++;
 			break;
 		case MISS_FIRE:
 			flagVerticalUp = false;
-			index = 1;
 			break;
 		case MISS:
 			flagVerticalUp = false;
-			index = 1;
 			return MISS;
 		}
 	}
 
 	// looking for the ship vertical down
 	static bool flagVerticaltDown = true;
+	index = 1;
 	while (flagVerticaltDown)
 	{
 		if (moveY - index < 1)
 		{
-			index = 1;
 			flagVerticaltDown = false;
 			break;
 		}
@@ -148,7 +140,6 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 			flagHorizontLeft = true;
 			flagVerticalUp = true;
 			flagVerticaltDown = true;
-			index = 1;
 			return SHIP_KILL;
 		case HIT_SHIP:
 			index++;
@@ -158,6 +149,7 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 }
 void Game::showGameBoards(bool showPlayerShip, bool showComputerShip)
 {
+	system("cls");
 	std::cout << "player board: \n";
 	player.showBoard(showPlayerShip);
 	std::cout << "computer board: \n";
@@ -172,31 +164,31 @@ bool Game::setShipsPlayer()
 	char symbol;
 	std::cin >> symbol;
 
-		switch (symbol)
-		{
-		case 'r':
-		case 'R':
-		{
-			std::unique_ptr<BaseSetShips> uniqPtr (new ComputerSetShips());
-			uniqPtr->setShip(player);
-			std::cout << std::endl;
-			return true;
-		}
-		case 'y':
-		case 'Y':
-		{
-			std::unique_ptr<BaseSetShips> uniqPtr(new PlayerSetShips());
-			uniqPtr->setShip(player);
-			std::cout << std::endl;
-			return true;
-		}
-		default:
-			return false;
-		}
+	switch (symbol)
+	{
+	case 'r':
+	case 'R':
+	{
+		std::unique_ptr<BaseSetShips> uniqPtr(new RandomSetShips());
+		uniqPtr->setShip(player);
+		std::cout << std::endl;
+		return true;
+	}
+	case 'y':
+	case 'Y':
+	{
+		std::unique_ptr<BaseSetShips> uniqPtr(new ManualSetShips());
+		uniqPtr->setShip(player);
+		std::cout << std::endl;
+		return true;
+	}
+	default:
+		return false;
+	}
 }
 void Game::setShipsComputer()
 {
-	std::unique_ptr<BaseSetShips> uniqPtr(new ComputerSetShips());
+	std::unique_ptr<BaseSetShips> uniqPtr(new RandomSetShips());
 	uniqPtr->setShip(computer);
 	std::cout << std::endl;
 }
@@ -216,7 +208,11 @@ void Game::start()
 			std::cout << "make you choice (enter x, y): ";
 			int x;
 			int y;
-			std::cin >> x >> y;
+			//std::cin >> x >> y;
+			Test test;
+			x = test.getX();
+			y = test.getY();
+
 			if (x > 10 || x < 1 || y > 10 || y < 1)
 				continue;
 			playerDetector = makeMove(computer, x, y);
@@ -228,6 +224,7 @@ void Game::start()
 
 		if (playerDetector == GAMEOVER)
 		{
+			showGameBoards(1, 0);
 			std::cout << "player WIN !!!\n";
 			break;
 		}
@@ -268,6 +265,7 @@ void Game::start()
 
 		if (computerDetector == GAMEOVER)
 		{
+			showGameBoards(1, 0);
 			std::cout << "Computer WIN !!!\n";
 			break;
 		}

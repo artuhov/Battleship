@@ -1,8 +1,8 @@
 #pragma once
 #include "Board.h"
 #include "BaseSetShips.h"
-#include "PlayerSetShips.h"
-#include "ComputerSetShips.h"
+#include "ManualSetShips.h"
+#include "RandomSetShips.h"
 
 class Game
 {
