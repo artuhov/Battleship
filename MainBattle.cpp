@@ -1,13 +1,14 @@
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctime>
-#include "Game.h"
+#include "GamePlay.h"
 
 int main()
 {
 	srand(time(NULL));
 
-	Game game;
+	GamePlay game;
 	
 	if (game.setShipsPlayer() == false)
 	{
@@ -17,6 +18,7 @@ int main()
 	game.setShipsComputer();
 
 	game.start();
-	
+
+	system("pausen");
 	return 0;
 }

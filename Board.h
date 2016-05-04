@@ -17,15 +17,15 @@ public:
 		return board[moveY][moveX];
 	}
 	void showBoard(bool shipShow) const;
-	bool checkShipKill(const Move& move);
-	void markShipKill(int moveX, int moveY);
+	bool isShipKilled(const Move& move);
+	void markKilledShip(int moveX, int moveY);
 	bool checkWinnig();
 
 private:
 	static const int BOARD_SIZE = 12;
 	int board[BOARD_SIZE][BOARD_SIZE];
-	bool checkShipKill2(Movement movement);
-	void markShipKill2(int moveX, int moveY, Movement::Direction direction);
+	bool checkShipKilled(Movement movement);
+	void markShipAround(int moveX, int moveY, Movement::Direction direction);
 	void markShipKill3(int moveX, int moveY, Movement::Direction direction);
 
 };

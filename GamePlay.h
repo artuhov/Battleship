@@ -4,7 +4,7 @@
 #include "ManualSetShips.h"
 #include "RandomSetShips.h"
 
-class Game
+class GamePlay
 {
 public:
 	bool setShipsPlayer();

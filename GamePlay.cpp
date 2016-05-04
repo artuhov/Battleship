@@ -1,9 +1,9 @@
 #include <iostream>
 #include <memory>
-#include "Game.h"
+#include "GamePlay.h"
 #include "Test.h"
 
-Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
+GamePlay::GameParametrs GamePlay::makeMove(Board& board, int moveX, int moveY)
 {
 	switch (board.getValue(moveX, moveY))
 	{
@@ -15,9 +15,9 @@ Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 	case Board::INSERTED_SHIP:
 		std::cout << "make a move to (" << moveX << ", " << moveY << ")\n";
 		board.setValue(moveX, moveY, Board::STRICKEN_SHIP);
-		if (board.checkShipKill(Move(moveX, moveY)))
+		if (board.isShipKilled(Move(moveX, moveY)))
 		{
-			board.markShipKill(moveX, moveY);
+			board.markKilledShip(moveX, moveY);
 			if (board.checkWinnig())
 				return GAMEOVER;
 			return SHIP_KILL;
@@ -30,7 +30,7 @@ Game::GameParametrs Game::makeMove(Board& board, int moveX, int moveY)
 	}
 }
 
-Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
+GamePlay::GameParametrs GamePlay::finishShipKill(Board& board, int moveX, int moveY)
 {
 	int index = 1;
 
@@ -147,15 +147,15 @@ Game::GameParametrs Game::finishShipKill(Board& board, int moveX, int moveY)
 		}
 	}
 }
-void Game::showGameBoards(bool showPlayerShip, bool showComputerShip)
+void GamePlay::showGameBoards(bool showPlayerShip, bool showComputerShip)
 {
-	system("cls");
+	//system("cls");
 	std::cout << "player board: \n";
 	player.showBoard(showPlayerShip);
 	std::cout << "computer board: \n";
 	computer.showBoard(showComputerShip);
 }
-bool Game::setShipsPlayer()
+bool GamePlay::setShipsPlayer()
 {
 	std::cout << "\t\t _____   H e l l o !    I t    i s    S E A    B A T T L E    G A M E   _____\n\n";
 	std::cout << "Do you want enter ships random (r) or by yourself (y)? \n";
@@ -186,13 +186,13 @@ bool Game::setShipsPlayer()
 		return false;
 	}
 }
-void Game::setShipsComputer()
+void GamePlay::setShipsComputer()
 {
 	std::unique_ptr<BaseSetShips> uniqPtr(new RandomSetShips());
 	uniqPtr->setShip(computer);
 	std::cout << std::endl;
 }
-void Game::start()
+void GamePlay::start()
 {
 	std::cout << "G A M E   S T A R T E D \n\n";
 	GameParametrs playerDetector = MISS_FIRE;
@@ -270,5 +270,6 @@ void Game::start()
 			break;
 		}
 		// the end of a computer's turn
+
 	}
 }

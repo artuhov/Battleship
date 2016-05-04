@@ -41,29 +41,29 @@ void Board::showBoard(bool shipShow) const
 	std::cout << "   |____________________|\n\n";
 }
 
-bool Board::checkShipKill2(Movement movement)
+bool Board::checkShipKilled(Movement movement)
 {
-	BoardParametrs shoot = static_cast<BoardParametrs> (board[movement.getMovementY()][movement.getMovementX()]);
-	while (shoot != EMPTY_CELL && shoot != BOSS_SHOT)
+	BoardParametrs shot = static_cast<BoardParametrs> (board[movement.getMovementY()][movement.getMovementX()]);
+	while (shot != EMPTY_CELL && shot != BOSS_SHOT)
 	{
-		if (shoot == INSERTED_SHIP)
+		if (shot == INSERTED_SHIP)
 			return false;
 		movement++;
-		shoot = static_cast<BoardParametrs> (board[movement.getMovementY()][movement.getMovementX()]);
+		shot = static_cast<BoardParametrs> (board[movement.getMovementY()][movement.getMovementX()]);
 	}
 	return true;
 }
 
-bool Board::checkShipKill(const Move& move)
+bool Board::isShipKilled(const Move& move)
 {
-	bool check = checkShipKill2(Movement(move, Movement::NONE, Movement::POSITIVE));
-	check &= checkShipKill2(Movement(move, Movement::NONE, Movement::NEGATIVE));
-	check &= checkShipKill2(Movement(move, Movement::POSITIVE, Movement::NONE));
-	check &= checkShipKill2(Movement(move, Movement::NEGATIVE, Movement::NONE));
+	bool check = checkShipKilled(Movement(move, Movement::NONE, Movement::POSITIVE));
+	check &= checkShipKilled(Movement(move, Movement::NONE, Movement::NEGATIVE));
+	check &= checkShipKilled(Movement(move, Movement::POSITIVE, Movement::NONE));
+	check &= checkShipKilled(Movement(move, Movement::NEGATIVE, Movement::NONE));
 	return check;
 }
 
-void Board::markShipKill2(int moveX, int moveY, Movement::Direction direction)
+void Board::markShipAround(int moveX, int moveY, Movement::Direction direction)
 {
 	int i = 0;
 	do {
@@ -82,14 +82,14 @@ void Board::markShipKill3(int moveX, int moveY, Movement::Direction direction)
 	board[moveY][moveX + (i - 1) * direction] = BOSS_SHOT;
 }
 
-void Board::markShipKill(int moveX, int moveY)
+void Board::markKilledShip(int moveX, int moveY)
 {
 
 	//mark horizontal coordinates to the rightward and leftward
 	if (board[moveY][moveX + 1] != STRICKEN_SHIP && board[moveY][moveX - 1] != STRICKEN_SHIP)
 	{
-		markShipKill2(moveX, moveY, Movement::POSITIVE);
-		markShipKill2(moveX, moveY, Movement::NEGATIVE);
+		markShipAround(moveX, moveY, Movement::POSITIVE);
+		markShipAround(moveX, moveY, Movement::NEGATIVE);
 	}
 
 	//mark upright coordinates to the upward and downward
