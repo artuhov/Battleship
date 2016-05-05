@@ -9,11 +9,14 @@ int main()
 
 	GamePlay game;
 	
-	if (game.setShipsPlayer() == false)
+	bool playerFlag = game.setShipsPlayer();
+
+	if (!playerFlag)
 	{
 		std::cout << "Goodbye!\n";
 		return 0;
 	};
+
 	game.setShipsComputer();
 
 	game.start();
