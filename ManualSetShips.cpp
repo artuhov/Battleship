@@ -16,7 +16,7 @@ void ManualSetShips::setShip(Ship::TubesShip nTubes, Board& board)
 	if (checkShip(ship, board))
 	{
 		insertShip(ship, board);
-		board.showBoard(1);
+		board.showBoard(Board::SHOW);
 	}
 	else
 		setShip(nTubes, board);

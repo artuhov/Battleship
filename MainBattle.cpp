@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctime>
 #include "GamePlay.h"
 
@@ -19,6 +18,5 @@ int main()
 
 	game.start();
 
-	system("pausen");
 	return 0;
 }

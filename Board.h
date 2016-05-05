@@ -7,6 +7,8 @@ class Board
 {
 public:
 	Board();
+	static const int GAME_BOARD_SIZE = 10;
+	enum ShowBoardShips { NOSHOW, SHOW };
 	enum  BoardParametrs { EMPTY_CELL, INSERTED_SHIP, STRICKEN_SHIP, BOSS_SHOT };
 	void setValue(int moveX, int moveY, BoardParametrs value)
 	{

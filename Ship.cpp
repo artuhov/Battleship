@@ -10,12 +10,12 @@ Ship::Ship()
 }
 Ship::Ship(TubesShip nTubes)
 {
-	const int BOARD_SIZE = 10;
+	const int GAME_BOARD_SIZE = 10;
 
-	startX_ = 1 + rand() % BOARD_SIZE;
-	startY_ = 1 + rand() % BOARD_SIZE;
+	startX_ = 1 + rand() % GAME_BOARD_SIZE;
+	startY_ = 1 + rand() % GAME_BOARD_SIZE;
 	endX_ = startX_;
-	endY_ = (startY_ + nTubes - 1 <= BOARD_SIZE) ? (startY_ + nTubes - 1) : (startY_ - (nTubes - 1));
+	endY_ = (startY_ + nTubes - 1 <= GAME_BOARD_SIZE) ? (startY_ + nTubes - 1) : (startY_ - (nTubes - 1));
 
 	if (rand() % 2)		 // change startX with startY and etc for more random results
 		changeXY();

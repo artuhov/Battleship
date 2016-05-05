@@ -14,10 +14,10 @@ void Board::showBoard(bool shipShow) const
 	std::cout << "  x|1 2 3 4 5 6 7 8 9 10\n";
 	std::cout << " y_|____________________\n";
 
-	for (int i = 1; i < BOARD_SIZE - 1; i++)
+	for (int i = 1; i <= GAME_BOARD_SIZE; i++)
 	{
 		std::cout << std::setw(2) << i << " |";
-		for (int j = 1; j < BOARD_SIZE - 1; j++)
+		for (int j = 1; j <= GAME_BOARD_SIZE; j++)
 			switch (board[i][j])
 			{
 			case EMPTY_CELL:
@@ -101,8 +101,8 @@ void Board::markKilledShip(int moveX, int moveY)
 }
 bool Board::checkWinnig()
 {
-	for (int i = 1; i < BOARD_SIZE - 1; i++)
-		for (int j = 1; j < BOARD_SIZE - 1; j++)
+	for (int i = 1; i <= GAME_BOARD_SIZE; i++)
+		for (int j = 1; j <= GAME_BOARD_SIZE; j++)
 			if (board[i][j] == INSERTED_SHIP)
 				return false;
 	return true;
