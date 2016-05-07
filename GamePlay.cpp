@@ -29,7 +29,6 @@ GamePlay::GameParametrs GamePlay::makeMove(Board& board, int moveX, int moveY)
 		return MISS_FIRE;
 	}
 }
-
 GamePlay::GameParametrs GamePlay::finishShipKill(Board& board, int moveX, int moveY)
 {
 	int index = 1;
@@ -208,12 +207,12 @@ void GamePlay::start()
 			std::cout << "make you choice (enter x, y): ";
 			int x;
 			int y;
-			std::cin >> x >> y;
+			//std::cin >> x >> y;
 
-			//Test test;
-			//x = test.getX();
-			//y = test.getY();
-			
+			Test test;
+			x = test.getX();
+			y = test.getY();
+
 			const int RISE_GAME_BOARD = 1;
 			if (x > Board::GAME_BOARD_SIZE || y > Board::GAME_BOARD_SIZE || x < RISE_GAME_BOARD || y < RISE_GAME_BOARD)
 				continue;
@@ -227,7 +226,7 @@ void GamePlay::start()
 		if (playerDetector == GAMEOVER)
 		{
 			showGameBoards(Board::SHOW, Board::NOSHOW);
-			std::cout << "player WIN !!!\n";
+			std::cout << "yuo WIN !!!\n";
 			break;
 		}
 		// the end of a player's turn
@@ -237,13 +236,13 @@ void GamePlay::start()
 		while (computerDetector == SHIP_KILL || computerDetector == HIT_SHIP || computerDetector == MISS_FIRE)
 		{
 			static bool hitShipStatus = false;
-			static int moveX;
-			static int moveY;
+			static int	moveX;
+			static int	moveY;
 
 			if (!hitShipStatus)
 			{
-				moveX = 1 + rand() % Board::GAME_BOARD_SIZE;
-				moveY = 1 + rand() % Board::GAME_BOARD_SIZE;
+				moveX = rand() % Board::GAME_BOARD_SIZE + 1;
+				moveY = rand() % Board::GAME_BOARD_SIZE + 1;
 
 				computerDetector = makeMove(player, moveX, moveY);
 				if (computerDetector == HIT_SHIP)

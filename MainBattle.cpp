@@ -6,19 +6,16 @@
 int main()
 {
 	srand(time(NULL));
-
 	GamePlay game;
-	
-	bool playerFlag = game.setShipsPlayer();
 
+	bool playerFlag = game.setShipsPlayer();
 	if (!playerFlag)
 	{
 		std::cout << "Goodbye!\n";
 		return 0;
 	};
-
 	game.setShipsComputer();
-
+	
 	game.start();
 
 	return 0;
