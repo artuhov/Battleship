@@ -61,6 +61,7 @@ GamePlay::GameParametrs GamePlay::finishShipKill(Board& board, int moveX, int mo
 		}
 	}
 	// looking for the ship horizontally left
+	//please fix here
 	static bool flagHorizontLeft = true;
 	index = 1;
 	while (flagHorizontLeft)
