@@ -4,6 +4,7 @@
 bool BaseSetShips::checkShip(const Ship& ship, const Board& board) const
 {
 
+//cool game
 	int startX = ship.getStartX();
 	int startY = ship.getStartY();
 	int endX = ship.getEndX();
