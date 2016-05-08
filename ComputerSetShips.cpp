@@ -7,5 +7,6 @@ void ComputerSetShips::setShipRecursion(Ship::TubesShip nTubes, Board& board)
 	if (checkShip(ship, board))
 		insertShip(ship, board);
 	else
+	//sdhjfjhfhjffhjjfhfjh
 		setShipRecursion(nTubes, board);
 }
