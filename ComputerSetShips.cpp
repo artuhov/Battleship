@@ -1,6 +1,6 @@
 #include "ComputerSetShips.h"
 
-//good methdod  rkjerj
+//good method
 void ComputerSetShips::setShipRecursion(Ship::TubesShip nTubes, Board& board)
 {
 	Ship ship(nTubes);
